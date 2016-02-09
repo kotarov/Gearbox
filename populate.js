@@ -18,9 +18,7 @@ $.fn.populate = function(dat, opts, cb) {
 	_populate(this, dat, $.extend(defs,opts));
     }
     return this;
-
-
-
+////////////////////////////////
     function _populate(par, dat, opts){
 	    $(par).find("[name]").each(function(){
 		var name = $(this).attr("name")
@@ -30,7 +28,6 @@ $.fn.populate = function(dat, opts, cb) {
 	            _setValue( this, false, opts );
 	    }) 
     }
-
     function _setValue(obj, val, opts){
     	$(obj).removeClass(opts.errorClass);
 	switch( $(obj).prop("tagName") ){
