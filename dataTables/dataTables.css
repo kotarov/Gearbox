@@ -1,0 +1,57 @@
+.dataTables_wrapper > div { margin-bottom:1em}
+.dataTable{clear:both}
+.dataTable th{ 
+	padding:0 0.5em;
+	border-width:0 0 1px 0!important;
+	font-weight:bold;
+}
+.DataTables_sort_wrapper {position:relative}
+.DataTables_sort_icon {position:absolute;right:0;top:1px}
+th.sorting { cursor:pointer}
+
+.dataTables_length{float:left}
+.dataTables_filter{float:right}
+
+
+.css_right, .dataTables_paginate{float:right}
+.dataTables_info{float:left}
+
+.paging_simple_numbers span > .ui-button{
+	padding:8px 15px 8px 13px;
+	margin-left: 0;
+	margin: 0 -1px;
+}
+
+.paging_simple_numbers .previous, .paging_simple_numbers .next,
+.paging_simple_numbers span{
+	border-color:transparent!important;
+	margin:0 0.5em;
+}
+
+.paging_simple_numbers span > .ui-state-disabled {background:#000;color:#fff;opacity:1}
+
+/*** icons ***/
+table.dataTable thead th {
+    position: relative;
+    background-image: none !important;
+}
+ 
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    position: absolute; top: 0; right: 0;
+    display: block;
+    font-family: FontAwesome;
+}
+
+table.dataTable thead th.sorting:after {
+    content: "\f0dc";
+    color: #ddd;
+    font-size: 0.8em;
+}
+table.dataTable thead th.sorting_asc:after { content: "\f0de"; color:#186fa8}
+table.dataTable thead th.sorting_desc:after { content: "\f0dd"; color:#186fa8}
+
+table.dataTable.no-footer tfoot tr th,
+table.dataTable.no-footer tfoot tr td { border-bottom:none!important }
+/*.uk-table td, .uk-table th*/

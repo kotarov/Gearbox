@@ -1,0 +1,19 @@
+
+
+{
+	"sProcessing":   "Моля почакайте...",
+	"sLengthMenu":   "Покажи _MENU_ елемента",
+	"sZeroRecords":  "Няма записи",
+	"sInfo":         "Показват се _START_ до _END_ от _TOTAL_ записа",
+	"sInfoEmpty":    "Показват се 0 до 0 от 0 записа",
+	"sInfoFiltered": "(филтрирани от _MAX_ всичко)",
+	"sInfoPostFix":  "",
+	"sSearch":       "Търси:",
+	"sUrl":          "",
+	"oPaginate": {
+		"sFirst":    "Първа",
+		"sPrevious": "Предишна",
+		"sNext":     "Следваща",
+		"sLast":     "Последна"
+	}
+}
