@@ -1,1 +1,57 @@
 
+/** http://kotarov.github.io/Gearbox/ */
+/* text colors */
+.transparent{color:transparent!important}
+.red{color:red!important}
+.green{color:green!important}
+.blue{color:blue!important}
+.gray{color:gray!important}
+.white, .white:focus, .white:active {color:white!important}
+.yellow{color:gold!important}
+.orange{color:orange!important}
+.purple{color:purple!important}
+
+.lightred{color:lightred!important}
+.lightgreen{color:lightgreen!important}
+.lightblue{color:lightblue!important}
+.lightgray{color:lightgray!important}
+.lightblack{color:lightblack!important}
+.lightwhite{color:lightwhite!important}
+.lightyellow{color:lightyellow!important}
+
+.darkred{color:darkred!important}
+.darkgreen{color:darkgreen!important}
+.darkblue{color:darkblue!important}
+.darkgray{color:darkgray!important}
+.black{color:black!important}
+.darkyellow{color:darkkhaki!important}
+.darkorange{color:darkorange!important}
+.darkpurple{color:darkmagenta!important}
+
+/* back colors */
+.bg-red{background-color:red!important}
+.bg-green{background-color:green!important}
+.bg-blue{background-color:blue!important}
+.bg-gray{background-color:gray!important}
+.bg-white{background-color:white!important}
+.bg-yellow{background-color:gold!important}
+.bg-orange{background-color:orange!important}
+.bg-purple{background-color:purple!important}
+
+.bg-lightred{background-color:lightred!important}
+.bg-lightgreen{background-color:lightgreen!important}
+.bg-lightblue{background-color:lightblue!important}
+.bg-lightgray{background-color:lightgray!important}
+.bg-lightblack{background-color:lightblack!important}
+.bg-lightwhite{background-color:lightwhite!important}
+.bg-lightyellow{background-color:lightyellow!important}
+
+.bg-darkred{background-color:darkred!important}
+.bg-darkgreen{background-color:darkgreen!important}
+.bg-darkblue{background-color:darkblue!important}
+.bg-darkgray{background-color:darkgray!important}
+.bg-black{background-color:black!important}
+.bg-darkyellow{background-color:darkkhaki!important}
+.bg-darkorange{background-color:darkorange!important}
+.bg-darkpurple{background-color:darkmagenta!important}
+.bg-darkgray{background-color:#444!important}
