@@ -1,4 +1,4 @@
-/* skotarov@gmail.com */
+/** http://kotarov.github.io/Gearbox/ */
 $.fn.populate = function(dat, opts, cb) {
     var defs =  {
 	reset:	true,
