@@ -1,3 +1,4 @@
+/* skotarov@gmail.com */
 $.fn.populate = function(dat, opts, cb) {
     var defs =  {
 	reset:	true,
