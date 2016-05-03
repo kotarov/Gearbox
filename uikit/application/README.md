@@ -140,17 +140,23 @@ When the value of control depends on the value of another. Depended values are s
 
 
 
-// SELECT2
-/**
- * elements: select.select2
- * 
- * data-ajax--url="ajax.php?f=..."
- * data-placeholder="bla bla"
- * data-allow-clear="true"
- * data-templateSelection='<i class="{{icon}}"> {{text}}'
- * data-templateResult
- * 
- **/
+## SELECT2
+
+
+```html
+ <select class="select2"
+  data-ajax--url="ajax.php?f=..."
+  data-placeholder="bla bla"
+  data-allow-clear="true"
+  data-templateSelection='<i class="{{icon}}"> {{text}}'
+  data-templateResult
+></select>
+```
+
+### json
+```javascript
+{ id: 1, text: "name", icon:"icon" ...}
+```
 
 
 
@@ -159,7 +165,9 @@ Directly to change value without modal
 
 ### html
 ```html
-    <a  data-toggle="url.of.toggle"
+    <a  href="url.of.toggle"
+        data-toggle="field"
+        dat-post='{"id":"d1","field2":"field2"}' 
         data-trigger="call-back-trigger"
     > Click </a>
 ```
