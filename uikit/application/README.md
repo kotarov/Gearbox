@@ -23,7 +23,7 @@ Use to creat DB applications
 ## Initializing of data
 HTML pages are cached, so the data that must be filled to withdraw with ajax request.
 
-### HTML
+### html
 ```html
 <select data-get="filte.to.json"></select>
 ...
@@ -32,7 +32,7 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 <textarea data-get="file.to.value"></textarea>
 ```
 
-### JSON
+### json
 ```javascript
 { 
     data : [
