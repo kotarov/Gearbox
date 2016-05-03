@@ -52,36 +52,18 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 
 ## Submit
 All forms are offset by AJAX and always sent via POST
+html
 ```html
 <form action="url.to.submit" data-trigger="name-of-trigger-after-submit"></form>
 ```
-```php
-<?php
-$ret = array();
-$post = filter_var_array($_POST,array(
-    'name'=>FILTER_SANITIZE_STRING,
-    'id_parent'=>FILTER_VALIDATE_INT,
-    'pos'=>FILTER_VALIDATE_INT,
-    'description'=>FILTER_SANITIZE_STRING,
-    'tags' => FILTER_SANITIZE_STRING
-));
-
-if(!$post['name']) $ret['required'][] = 'name';
-//if(!$post['id_parent']) $ret['required'][] = 'id_parent';
-if(!$post['description']) $ret['required'][] = 'description';
-if(!$post['tags']) $ret['required'][] = 'tags';
-
-if(!isset($ret['required'])){
-    $sets = array_keys($post);
-    $dbh = new PDO('sqlite:'.DB_DIR.'products');
-    $sth = $dbh->prepare("INSERT INTO categories (".implode(',', $sets).") VALUES (:".implode(", :", $sets).")");
-    $sth->execute($post);
-    $_REQUEST['id'] = $dbh->lastInsertId();
-    include 'prepareCategories.php';
-    include 'getCategories.php';
-    $ret['success'] = 'Category with id='.$_REQUEST['id'].' added.';
+json
+```json
+{   success: "Message of success"
+    id: 3,
+    data: [ { "1","2","3" } ]
 }
-
-return json_encode($ret);
-
+OR
+{   required: ["fieldnme1","fieldname2"] }
+OR
+{   error: "Error message" }
 ```
