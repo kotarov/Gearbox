@@ -50,8 +50,9 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 ```
 
 
+
 ## FORM - Init
-All forms are inside modals.
+All forms are inside modal dialogs.
 
 ### html
 ```html
@@ -66,6 +67,9 @@ All forms are inside modals.
         <input name="id">
     </form>
 </div>
+<script>
+    $("#dialog").on("populated", function(e,ret){ /* use: ret.data[0] */ });
+</script>
 ```
 
 ### json
