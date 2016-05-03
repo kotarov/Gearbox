@@ -47,17 +47,37 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 }
 ```
 
-## FORM
-## Init
+## FORM - Init
+All forms are inside modals.
 
-## Submit
-All forms are offset by AJAX and always sent via POST
-html
+### html
 ```html
-<form action="url.to.submit" data-trigger="name-of-trigger-after-submit"></form>
+<a href="#id_dialog" data-populate='{"field":"value",...}' data-get="field1=val1&field2=val2"> Click me </a>
+...
+<div id="id-dialog" class="uk-dialog" data-get="url://of.json.data">
+    <form></form>
+</div>
 ```
-json
-```json
+
+### json
+```javascript
+{   data: [{ fieldname1:"data", fieldname2:"data" ... }] }
+```
+
+## FORM - Submit
+All forms are offset by AJAX and always sent via POST. To send files not first screen anything extra.
+
+### html
+```html
+<form action="url.to.submit" data-trigger="name-of-trigger-after-submit">
+    <input type="text" name="filename">
+    <input type="file" name="file">
+    <button type="submit"> Submit </button>
+</form>
+```
+
+### json
+```javascript
 {   success: "Message of success"
     id: 3,
     data: [ { "1","2","3" } ]
