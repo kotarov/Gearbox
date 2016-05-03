@@ -10,23 +10,6 @@ $.ajaxSetup({
 });
 
 // TABLES
-/**
- * elements: table.dataTable
- * 
- * data-trigger-reload
- * data-trigger-update
- * data-trigger-add
- * data-trigger-delete
- * 
- **/
-
-$("[data-trigger-reload]").each(function(k,t){
-    $.each( $(this).data("trigger-reload").split(","), function(kk,tr){
-        $(document).on($.trim(tr), function(e){
-            $(t).DataTable().ajax.reload();
-        });
-    });
-});
 $("[data-trigger-update]").each(function(k,t){
     $.each(  $(this).data("trigger-update").split(","), function(kk,tr){
         $(document).on( tr, function(e, d){
@@ -54,15 +37,7 @@ $("[data-trigger-add]").each(function(k,t){
 });
 
 
-// TOGGLE
-/**
- * elements: a
- * 
- * data-toggle
- * data-trigger
- * 
- **/
-
+// TOGGLES
 $(document).on("click","a[data-toggle]",function(e){
     e.preventDefault();
     var id = $(this).data("id"),
@@ -83,34 +58,7 @@ $(document).on("click","a[data-toggle]",function(e){
     });
 });
 
-
-
-// FORM
-/**
- * elements: form
- * 
- * action
- * data-get
- * data-trigger
- * 
-/**
- * elements: a[href][da-uk-modal]
- * 
- * href
- * data-uk-modal
- //* data-id - deprecated
- * data-get="add_extra=parmam&for=get_url"
- * data-populate='{"must":"be","an":"object"}'
- * 
-/** 
- * elements: select[type=submit]
- *
- * data-submit-on-change
- *
- **/
-
-// Form Init
-
+// FORMS
 $(document).on("click","a[href][data-uk-modal]", function(e){
     var id = $(this).data("id"),
         data_get=$(this).data("get"),
@@ -125,20 +73,15 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
     modal.find("select.select2[data-ajax--url]").html("").trigger("change");
     modal.find(".uk-form-danger").removeClass('uk-form-danger');
     modal.find(".uk-alert").remove();
-    /*if(typeof id !== "undefined") modal.find("[name=id]").each(function(){
-        if($(this).prop("tagName")=="INPUT") $(this).val(id); else $(this).text(id);
-    });*/
     if(typeof populate == "object") $.each(populate,function(k,v){
         modal.find("[name='"+k+"']").each(function(){ if($(this).prop("tagName")=="INPUT") $(this).val(v); else $(this).text(v); });
     });
     if(typeof id_parent !== 'undefined') modal.find("input[name=id_parent]").val(id_parent);
     modal.find("table[data-get]").each(function(){
-        //$(this).DataTable().ajax.url("ajax.php?f="+$(this).data("get")+"&id="+id).load();
         $(this).DataTable().ajax.url("ajax.php?f="+$(this).data("get")+(url_get.indexOf("?")>-1?"&":"?")+data_get).load();
     });
     
     if(typeof url_get !== 'undefined'){
-        //$.getJSON("ajax.php?f="+url+"&id="+id).done(function(ret){
         $.getJSON(url_get+(url_get.indexOf("?")>-1?"&":"?")+data_get).done(function(ret){
             if(ret.data && ret.data[0]) $.each(ret.data[0], function(k,v){
                 modal.find("[name='"+k+"']").each(function(r,input){ input = $(this);
@@ -163,10 +106,7 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
     }else UIkit.modal(modal).show();
 });
 
-// Form Submit
-
 $("select[type=submit]").on("change",function(e){ if($(this).val()!='' && $(this).val() != 0) $(this).closest("form").submit()});
-
 $("form").submit(function(e){ 
     e.preventDefault();
     var $form = $(this);
@@ -214,20 +154,7 @@ $("form").submit(function(e){
     });
 });
 
-
-
 // SELECT2
-/**
- * elements: select.select2
- * 
- * data-ajax--url="ajax.php?f=..."
- * data-placeholder="bla bla"
- * data-allow-clear="true"
- * data-templateSelection='<i class="{{icon}}"> {{text}}'
- * data-templateResult
- * 
- **/
-
 $("select.select2").each(function(k,o){
     var sets = {};
 
@@ -241,7 +168,7 @@ $("select.select2").each(function(k,o){
     
     var ph = $(this).attr("data-placeholder"); 
     if(typeof ph =="undefined") {
-        $(this).attr("data-placeholder",""); // because a bug with templates
+        $(this).attr("data-placeholder","");
         ph = "";
     }else{
         ph='<span class="uk-text-muted">'+ph+'</span>';
@@ -264,23 +191,12 @@ $("select.select2").each(function(k,o){
     $(this).select2(sets);
 });
 
-
 // INIT Data  +  DEPENDANCES
-/**
- * elements: input, select, textarea
- * 
- * data-get = "ajax.php?f="
- * data-depends-on = "#id_of_tag,#id_of_seond_dependance" //! "change" тригер се прави само за първото id, следващите само се добавят за филтър
- * 
- **/
-
 $("select[data-get], input[data-get], textarea[data-get]").each(function(){ _dataGet(this); });
-
 $("select[data-depends-on], input[data-depends-on], textarea[data-depends-on]").each(function(n,obj){ 
     var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
     $($.trim(dep[0])).on("change",function(){ _dataGet(obj); }); 
 });
-
 
 function _dataGet(obj){
     var url = $(obj).data("get");
