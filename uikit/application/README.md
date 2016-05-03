@@ -50,6 +50,18 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 ```
 
 
+// TABLES
+/**
+ * elements: table.dataTable
+ * 
+ * data-trigger-reload
+ * data-trigger-update
+ * data-trigger-add
+ * data-trigger-delete
+ * 
+ **/
+
+
 
 ## FORM - Init
 All forms are inside modal dialogs.
@@ -103,3 +115,17 @@ OR
 OR
 {   error: "Error message" }
 ```
+
+
+
+
+
+
+// TOGGLE
+/**
+ * elements: a
+ * 
+ * data-toggle
+ * data-trigger
+ * 
+ **/
