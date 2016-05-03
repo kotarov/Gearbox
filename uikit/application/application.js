@@ -7,11 +7,7 @@ $.ajaxSetup({
 	        if(a.redirect) widow.location.href = a.redirect;
         } catch(e){} return data;
     },
-    //error:function(xhr,status,error){window.UIkit.notify("<b class='uk-icon-bug'>  Ajax "+status+"</b> - "+error,"danger");}
 });
-//$(document).ajaxStart(function(){$("#progress").fadeIn(100)}).ajaxSuccess(function(){$("#progress").fadeOut(100);});
-
-
 
 // TABLES
 /**
