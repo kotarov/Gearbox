@@ -33,9 +33,16 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 ### JSON
 ```javascript
 { 
-    data : {   
-        id : 2, 
-        text:"The text goes here"
-    }
+    data : [
+        {
+            id : 1, 
+            text : "The text goes here",
+            name : "OR The text is here"
+        },{
+            id : 2,
+            text : "Second text",
+            fieldname : "Some outher data. All data is place in 'data-json' as json"
+        }
+    ]
 }
 ```
