@@ -3,6 +3,7 @@ Use to creat DB applications
 
 *This is extension of [UIKit](http://getuikit.com/) you can create nd support easly and quickly DB applications.*
 
+
 ## Installation
 ```html
 <head>
@@ -17,6 +18,7 @@ Use to creat DB applications
     <script src="js/application.js"></script>
 </body>
 ```
+
 
 ## Initializing of data
 HTML pages are cached, so the data that must be filled to withdraw with ajax request.
@@ -47,15 +49,22 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 }
 ```
 
+
 ## FORM - Init
 All forms are inside modals.
 
 ### html
 ```html
-<a href="#id_dialog" data-populate='{"field":"value",...}' data-get="field1=val1&field2=val2"> Click me </a>
+<a href="#dialog" data-uk-modal 
+    data-populate='{"field":"value",...}' 
+    data-get="field1=val1&field2=val2"
+> Click me</a>
 ...
-<div id="id-dialog" class="uk-dialog" data-get="url://of.json.data">
-    <form></form>
+<div id="dialog" class="uk-dialog" data-get="url://of.json.data">
+    <div> <span name="id"></span> </div>
+    <form>
+        <input name="id">
+    </form>
 </div>
 ```
 
@@ -69,9 +78,12 @@ All forms are offset by AJAX and always sent via POST. To send files not first s
 
 ### html
 ```html
-<form action="url.to.submit" data-trigger="name-of-trigger-after-submit">
+<form action="url.to.submit" data-trigger="call-back-trigger">
     <input type="text" name="filename">
     <input type="file" name="file">
+    <select type="submit">
+        <option> value </option>
+    </select>
     <button type="submit"> Submit </button>
 </form>
 ```
