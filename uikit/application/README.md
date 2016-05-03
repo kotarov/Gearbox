@@ -50,17 +50,24 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 ```
 
 
-// TABLES
-/**
- * elements: table.dataTable
- * 
- * data-trigger-reload
- * data-trigger-update
- * data-trigger-add
- * data-trigger-delete
- * 
- **/
+## TABLES
+Requires jquery dataTable plugin. This triggers are called from forms after submit.
 
+### html
+```html
+    <table id="table"
+        data-trigger-reload="trigger-when-must-reload-alldata" 
+        data-trigger-update="trigger-when-must-update-row"
+        data-trigger-add="trigger-when-must-add-new"
+        data-trigger-delete="trigger-when-must-delete-row" 
+    >
+    <script> $("#table").dataTable() </script>
+    <form id="new-item" data-trigger="trigger-when-must-add-new"></form>
+```
+### json
+```javascript
+{ data: [["d1","d2"...],["a1","a2"...]....] }
+```
 
 
 ## FORM - Init
@@ -117,15 +124,47 @@ OR
 ```
 
 
+## DEPENDANCES
+When the value of control depends on the value of another. Depended values are submitted via GET request if is set attribute "data-get". If there are more depended ids, "data change" is activated following a change in the first.
+
+### html
+```html
+<select id="tag_id1"></select>
+<input data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
+```
+
+### json
+```javascript
+{ data: [{"id":"d1","text":"d2",...}]  }
+```
 
 
 
-
-// TOGGLE
+// SELECT2
 /**
- * elements: a
+ * elements: select.select2
  * 
- * data-toggle
- * data-trigger
+ * data-ajax--url="ajax.php?f=..."
+ * data-placeholder="bla bla"
+ * data-allow-clear="true"
+ * data-templateSelection='<i class="{{icon}}"> {{text}}'
+ * data-templateResult
  * 
  **/
+
+
+
+## TOGGLE
+Directly to change value without modal
+
+### html
+```html
+    <a  data-toggle="url.of.toggle"
+        data-trigger="call-back-trigger"
+    > Click </a>
+```
+
+### json
+```javascript
+{   data: [{"d1","d2",....}] }
+```
