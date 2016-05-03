@@ -1,7 +1,7 @@
 #UIkit for Applications
-Use it to creat DB applications
+Use to creat DB applications
 
-*With this plugin you can create easly and fast backoffice applications.*
+*This is extension of [UIKit](http://getuikit.com/) you can create easly and fast backoffice applications.*
 
 ## Installation
 ```html
