@@ -61,6 +61,10 @@ Requires jquery dataTable plugin. This triggers are called from forms after subm
         data-trigger-add="trigger-when-must-add-new"
         data-trigger-delete="trigger-when-must-delete-row" 
     >
+        <tbody>
+            <tr> <td class="id"> 1 </td> <td> ....
+        </tbody>
+    </table>
     <script> $("#table").dataTable() </script>
     <form id="new-item" data-trigger="trigger-when-must-add-new"></form>
 ```
