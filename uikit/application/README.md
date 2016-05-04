@@ -22,6 +22,7 @@ Use to creat DB applications
 
 ## INIT of data
 HTML pages are cached, so the data that must be filled to withdraw with ajax request.
+Modal datas are loading every time modal is shown!
 
 ### html
 ```html
@@ -30,6 +31,13 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 <input data-get="file.to.vlue">
 ...
 <textarea data-get="file.to.value"></textarea>
+...
+<div id="dialog" class="uk-dialog" data-get="url://of.json.data">
+    <table id="table" data-get="url.to.table.data"></table>
+    <sript> $("#table").dataTable() </script>
+    
+    <form data-get="url.to.form.fill.data"></form>
+</div>
 ```
 
 ### json
@@ -88,6 +96,10 @@ All forms are inside modal dialogs.
 ...
 <div id="dialog" class="uk-dialog" data-get="url://of.json.data">
     <div> <span name="id"></span> </div>
+    
+    <table id="table" data-get="url.to.table.data"></table>
+    <sript> $("#table").dataTable() </script>
+    
     <form>
         <input name="id">
     </form>
