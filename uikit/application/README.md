@@ -70,7 +70,7 @@ Every time dialog is shown, the table's and the form's data inside are preinitia
         <input name="id">
     </form>
 </div>
-<script>
+<script> //usefull to disable none actual data  
     $("#dialog").on("populated", function(e,ret){ /* use: ret.data[0] */ });
 </script>
 ```
