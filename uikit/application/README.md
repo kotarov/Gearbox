@@ -20,9 +20,8 @@ Use to creat DB applications
 ```
 
 
-## INIT of data
+## Default INIT of data
 HTML pages are cached, so the data that must be filled to withdraw with ajax request.
-Modal datas are loading every time modal is shown!
 
 ### html
 ```html
@@ -31,13 +30,6 @@ Modal datas are loading every time modal is shown!
 <input data-get="file.to.vlue">
 ...
 <textarea data-get="file.to.value"></textarea>
-...
-<div id="dialog" class="uk-dialog" data-get="url://of.json.data">
-    <table id="table" data-get="url.to.table.data"></table>
-    <sript> $("#table").dataTable() </script>
-    
-    <form data-get="url.to.form.fill.data"></form>
-</div>
 ```
 
 ### json
@@ -55,6 +47,37 @@ Modal datas are loading every time modal is shown!
         }
     ]
 }
+```
+
+
+## DIALOG Init
+Every time dialog is shown, the table's and the form's data inside are preinitialized.
+
+### html
+```html
+<a href="#dialog" data-uk-modal 
+    data-populate='{"field":"value",...}' 
+    data-get="field1=val1&field2=val2"
+> Click me</a>
+...
+<div id="dialog" class="uk-dialog" data-get="url://of.json.data">
+    <div> <span name="id"></span> </div>
+    
+    <table id="table" data-get="url.to.table.data"></table>
+    <sript> $("#table").dataTable() </script>
+    
+    <form>
+        <input name="id">
+    </form>
+</div>
+<script>
+    $("#dialog").on("populated", function(e,ret){ /* use: ret.data[0] */ });
+</script>
+```
+
+### json
+```javascript
+{   data: [{ fieldname1:"data", fieldname2:"data" ... }] }
 ```
 
 
@@ -84,35 +107,7 @@ OR
 ```
 
 
-## FORM / DIALOG Init
-All forms are inside modal dialogs.
 
-### html
-```html
-<a href="#dialog" data-uk-modal 
-    data-populate='{"field":"value",...}' 
-    data-get="field1=val1&field2=val2"
-> Click me</a>
-...
-<div id="dialog" class="uk-dialog" data-get="url://of.json.data">
-    <div> <span name="id"></span> </div>
-    
-    <table id="table" data-get="url.to.table.data"></table>
-    <sript> $("#table").dataTable() </script>
-    
-    <form>
-        <input name="id">
-    </form>
-</div>
-<script>
-    $("#dialog").on("populated", function(e,ret){ /* use: ret.data[0] */ });
-</script>
-```
-
-### json
-```javascript
-{   data: [{ fieldname1:"data", fieldname2:"data" ... }] }
-```
 
 ## FORM Submit
 All forms are offset by AJAX and always sent via POST. To send files not first screen anything extra.
@@ -130,6 +125,7 @@ All forms are offset by AJAX and always sent via POST. To send files not first s
     </form>
 </div>
 ```
+
 
 ### json
 ```javascript
