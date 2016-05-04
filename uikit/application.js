@@ -66,11 +66,16 @@ $("[data-trigger-add]").each(function(k,t){
 
 $(document).on("click","a[data-toggle]",function(e){
     e.preventDefault();
-    var id = $(this).data("id"),
+    var //id = $(this).data("id"), //deprecated
+        data_post = $(this).data("post"), // {"id":"","field":"is_active"}
         field = $(this).data("toggle"),
         url = $(this).attr("href"),
         trigs = $(this).data("trigger");
-    var d = {id:id}; if(field) d['field'] = field;
+    var d = {};//{id:id}; //deprected
+    if(typeof data_post=="object") $.each( data_post,function(k,v){
+        d[k]=v;
+    });
+    if(field) d['field'] = field;
     $.post("ajax.php?f="+url,d).done(function(ret){
         ret = $.parseJSON(ret);
         if(ret.error){
@@ -95,7 +100,11 @@ $(document).on("click","a[data-toggle]",function(e){
  * data-trigger
  * 
 /**
- * elements: a[href][da-uk-modal]
+ * element: dialog
+ * trigger: populted
+ * 
+/**
+ * elements: a[href][data-uk-modal]
  * 
  * href
  * data-uk-modal
@@ -105,8 +114,6 @@ $(document).on("click","a[data-toggle]",function(e){
  * 
 /** 
  * elements: select[type=submit]
- *
- * data-submit-on-change
  *
  **/
 
@@ -133,9 +140,7 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
     modal.find("table[data-get]").each(function(){
         $(this).DataTable().ajax.url("ajax.php?f="+$(this).data("get")+(url_get.indexOf("?")>-1?"&":"?")+data_get).load();
     });
-    
     if(typeof url_get !== 'undefined'){
-        //$.getJSON("ajax.php?f="+url+"&id="+id).done(function(ret){
         $.getJSON(url_get+(url_get.indexOf("?")>-1?"&":"?")+data_get).done(function(ret){
             if(ret.data && ret.data[0]) $.each(ret.data[0], function(k,v){
                 modal.find("[name='"+k+"']").each(function(r,input){ input = $(this);
@@ -155,7 +160,7 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
                     }
                 });
             });
-            UIkit.modal(modal).show();
+            modal.trigger("populated",ret);
         });
     }else UIkit.modal(modal).show();
 });
@@ -175,7 +180,7 @@ $("form").submit(function(e){
     var uploadprogress_oldtext = $(".upload-progress").html();    
     
     $.ajax({
-        url: "ajax.php?f="+$form.attr('action'),
+        url: $form.attr('action'),
         data: new FormData( $form[0] ),
         type: 'post',
         dataType: "json",
