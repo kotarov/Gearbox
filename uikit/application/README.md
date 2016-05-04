@@ -1,4 +1,4 @@
-#UIkit for Applications
+# UI Kit for Applications
 Use to creat DB applications
 
 *This is extension of [UIKit](http://getuikit.com/). It helps you to create and support easly DB applications.*
