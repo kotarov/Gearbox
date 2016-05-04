@@ -4,7 +4,7 @@ Use to creat DB applications
 *This is extension of [UIKit](http://getuikit.com/). It helps you to create and support easly DB applications.*
 
 
-## Installation
+## INSTALL
 ```html
 <head>
     ...
@@ -20,7 +20,7 @@ Use to creat DB applications
 ```
 
 
-## Initializing of data
+## INIT of data
 HTML pages are cached, so the data that must be filled to withdraw with ajax request.
 
 ### html
@@ -67,10 +67,12 @@ Requires jquery dataTable plugin. This triggers are called from forms after subm
 ### json
 ```javascript
 { data: [["d1","d2"...],["a1","a2"...]....] }
+OR
+{ data: [{"key1":"d1", "key2": "d2"...},{"key1":"a1", "key2":"a2"...}....] }
 ```
 
 
-## FORM - Init
+## FORM / DIALOG Init
 All forms are inside modal dialogs.
 
 ### html
@@ -96,7 +98,7 @@ All forms are inside modal dialogs.
 {   data: [{ fieldname1:"data", fieldname2:"data" ... }] }
 ```
 
-## FORM - Submit
+## FORM Submit
 All forms are offset by AJAX and always sent via POST. To send files not first screen anything extra.
 
 ### html
