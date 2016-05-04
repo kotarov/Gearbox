@@ -103,14 +103,16 @@ All forms are offset by AJAX and always sent via POST. To send files not first s
 
 ### html
 ```html
-<form action="url.to.submit" data-trigger="call-back-trigger">
-    <input type="text" name="filename">
-    <input type="file" name="file">
-    <select type="submit">
-        <option> value </option>
-    </select>
-    <button type="submit"> Submit </button>
-</form>
+<div class="uk-modal" data-hide-on-submit>
+    <form action="url.to.submit" data-trigger="call-back-trigger">
+        <input type="text" name="filename">
+        <input type="file" name="file">
+        <select type="submit">
+            <option> value </option>
+        </select>
+        <button type="submit"> Submit </button>
+    </form>
+</div>
 ```
 
 ### json
