@@ -178,5 +178,8 @@ Directly to change value without modal
 
 ### json
 ```javascript
-{   data: [{"d1","d2",....}] }
+{   id:1, 
+    data: [{"d1","d2",....}],
+    sucess: "Success message"
+}
 ```
