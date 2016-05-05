@@ -135,7 +135,7 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
 
 // Form Submit
 
-$("select[type=submit]").on("change",function(e){ if($(this).val()!='' && $(this).val() != 0) $(this).closest("form").submit()});
+$("select[type=submit]").on("change",function(e){if($(this).val()!='' && $(this).val()!=0 && $(this).val()!==null) $(this).closest("form").submit()});
 
 $("form").submit(function(e){ 
     e.preventDefault();
