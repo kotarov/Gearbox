@@ -28,7 +28,7 @@ Use to creat DB applications
 ```
 
 
-## Default INIT of data
+## FILL DATA ON PAGE LOAD
 HTML pages are cached, so the data that must be filled to withdraw with ajax request.
 
 ### html
@@ -59,7 +59,7 @@ HTML pages are cached, so the data that must be filled to withdraw with ajax req
 
 
 ## DIALOG Init
-Every time dialog is shown, the table's and the form's data inside are preinitialized.
+Every time dialog is shown, its data and the table's and the form's data inside are preinitialized.
 
 ### html
 ```html
