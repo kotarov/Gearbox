@@ -1,221 +1,265 @@
-# UI Kit for Applications
-Use to creat DB applications
-
-*This is extension of [UIKit](http://getuikit.com/). It helps you to create and support easly DB applications.*
-
-
-## INSTALL
-```html
-<head>
-    ...
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/css/uikit.min.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.25.0/js/uikit.min.js"></script>
-    
-    <link  href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.11/css/dataTables.uikit.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.11/js/dataTables.uikit.min.js"></script>
-    
-    <link  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
-    ...
-</head>
-<body>
-    ...
-    <script src="js/application.js"></script>
-</body>
-```
+$.ajaxSetup({
+    dataFilter: function(data,type){
+        try{var a = data;
+            if(typeof data != "object") a=$.parseJSON(data); 
+	        if(a.access_denided) window.location.href="index.php";
+	        if(a.error) window.UIkit.notify("<b>Error</b> "+a.error,"warning");
+	        if(a.redirect) widow.location.href = a.redirect;
+        } catch(e){} return data;
+    },
+});
 
 
-## FILL DATA ON PAGE LOAD
-HTML pages are cached, so the data that must be filled to withdraw with ajax request.
+// TABLES
 
-### html
-```html
-<select data-get="filte.to.json"></select>
-...
-<input data-get="file.to.vlue">
-...
-<textarea data-get="file.to.value"></textarea>
-```
+$("[data-trigger-reload]").each(function(k,t){
+    $.each( $(this).data("trigger-reload").split(","), function(kk,tr){
+        $(document).on($.trim(tr), function(e){
+            $(t).css("opacity",0);
+            $(t).DataTable().ajax.reload();
+            $(t).animate({opacity:1},"slow");
+        });
+    });
+});
+$("[data-trigger-update]").each(function(k,t){
+    $.each(  $(this).data("trigger-update").split(","), function(kk,tr){
+        $(document).on( tr, function(e, d){
+            if(d.id || (d.data && d.data[0] && d.data[0][0])){
+                //var row = $(t).find("[data-id="+(d.id?d.id:d.data[0][0])+"]").closest("tr");
+                var row = $(t).find(".id:contains("+d.id+")").closest("tr");
+                $(row).css("opacity",0);
+                $(t).dataTable().api().row( row ).data(d.data[0]).draw(false);
+                $(row).animate({opacity:1},"slow");
+            }
+        });
+    });
+});
+$("[data-trigger-delete]").each(function(k,t){
+    $.each($(this).data("trigger-delete").split(","), function(kk,tr){
+        $(document).on(tr, function(e, d){
+            var row = $(t).find(".id:contains("+d.id+")").closest("tr");
+            $(row).animate({opacity:0},"slow",function(){ $(t).dataTable().api().row(row).remove().draw(false);  });
+        });
+    });
+});
+$("[data-trigger-add]").each(function(k,t){
+    $.each($(this).data("trigger-add").split(","), function(kk,tr){
+        $(document).on( tr,function(e, d){
+            $.when( $(t).dataTable().api().row.add(d.data[0]).draw(false) ).done(function(){
+                $(t).find(".id:contains("+d.id+")").closest("tr").css("opacity",0).animate({opacity:1},"slow");
+            });
+        });
+    });
+});
 
-### json
-```javascript
-{ 
-    data : [
-        {
-            id : 1, 
-            text : "The text goes here",
-            name : "OR The text is here"
-        },{
-            id : 2,
-            text : "Second text",
-            fieldname : "Some outher data. All data is place in 'data-json' as json"
+
+// TOGGLE
+
+$(document).on("click","a[data-toggle]",function(e){
+    e.preventDefault();
+    var data_post = $(this).data("post"), // {"id":"","field":"is_active"}
+        field = $(this).data("toggle"),
+        url = $(this).attr("href"),
+        trigs = $(this).data("trigger");
+    var d = {};
+    if(typeof data_post=="object") $.each( data_post,function(k,v){
+        d[k]=v;
+    });
+    if(field) d['field'] = field;
+    $.post(url,d).done(function(ret){
+        ret = $.parseJSON(ret);
+        if(ret.error){
+            UIkit.notify(ret.error,"danger");
+        }else if(ret.success){
+            if(typeof trigs !== 'undefined') $.each( trigs.split(","), function(k,trig){    
+                $(document).trigger($.trim(trig), ret);
+            })
+            UIkit.notify(ret.success,"success");
         }
-    ]
-}
-```
+    });
+});
 
 
-## DIALOG Init
-Every time dialog is shown, its data and the table's and the form's data inside are preinitialized.
 
-### html
-```html
-<a href="#dialog" data-uk-modal 
-    data-populate='{"field":"value",...}' 
-    data-get="field1=val1&field2=val2"
-> Click me</a>
-...
-<div id="dialog" class="uk-dialog" data-get="url://of.json.data">
-    <div> <span name="id"></span> </div>
+// FORM
+
+// Form Init
+
+$(document).on("click","a[href][data-uk-modal]", function(e){
+    var id = $(this).data("id"),
+        data_get=$(this).data("get"),
+        populate=$(this).data("populate"),
+        id_parent = $(this).closest(".uk-modal").find("input[name=id]").val(),
+        modal = $($(this).attr("href")),
+        url_get = modal.data("get"),
+        form = modal.find("form")[0];
+        
+    if(typeof form !== 'undefined') form.reset();
+    modal.find("select").find("[selected]").not("[data-ajax--url]").prop("selected",false).trigger("change");
+    modal.find("select.select2[data-ajax--url]").html("").trigger("change");
+    modal.find(".uk-form-danger").removeClass('uk-form-danger');
+    modal.find(".uk-alert").remove();
+    if(typeof populate == "object") $.each(populate,function(k,v){
+        modal.find("[name='"+k+"']").each(function(){ if($(this).prop("tagName")=="INPUT") $(this).val(v); else $(this).text(v); });
+    });
+    if(typeof id_parent !== 'undefined') modal.find("input[name=id_parent]").val(id_parent);
+    modal.find("table[data-get]").each(function(){
+        var table_get = $(this).data("get");
+        if(typeof data_get == "string") table_get += (table_get.indexOf("?") > -1 ? "&" :"?") + data_get;
+        $(this).DataTable().ajax.url( table_get ).load();
+    });
+    if(typeof url_get !== 'undefined'){
+        $.getJSON(url_get+(url_get.indexOf("?")>-1?"&":"?")+data_get).done(function(ret){
+            if(ret.data && ret.data[0]) $.each(ret.data[0], function(k,v){
+                modal.find("[name='"+k+"']").each(function(r,input){ input = $(this);
+                    if(input.prop("tagName") == "SELECT"){
+                        if(v) $.each(v.split(","),function(kk,vv){ $("option[value='"+vv+"']",input).prop("selected",true); });
+                        input.trigger("change");
+                    }else if($.inArray(input.prop("tagName"), ["INPUT","TEXTAREA"]) > -1 ){
+                        if(input.attr("type") == "checkbox") input.prop("checked",v);
+                        else input.val(v);
+                    }else {
+                        if( input.hasClass("uk-switcher")) {  
+                            input.children("[data-value]").removeClass("uk-active");
+                            input.children("[data-value="+v+"]").addClass("uk-active");
+                        }else{
+                            input.html(v);
+                        }
+                    }
+                });
+            });
+            modal.trigger("populated",ret);
+        });
+    }else UIkit.modal(modal).show();
+});
+
+// Form Submit
+
+$("select[type=submit]").on("change",function(e){if($(this).val()!='' && $(this).val()!=0 && $(this).val()!==null) $(this).closest("form").submit()});
+
+$("form").submit(function(e){ 
+    e.preventDefault();
+    var $form = $(this);
     
-    <table id="table" data-get="url.to.table.data"></table>
-    <sript> $("#table").dataTable() </script>
+    $form.find(".uk-switcher>*").each(function(){$(this).find("[type=hidden]").prop("disabled",!$(this).hasClass("uk-active"))});
+    $form.find(".uk-form-danger").removeClass('uk-form-danger');
+    $form.find(".uk-alert").remove();
+
+    var uploadprogress_oldtext = $(".upload-progress").html();    
     
-    <form>
-        <input name="id">
-    </form>
-</div>
-<script> //usefull to disable none actual data  
-    $("#dialog").on("populated", function(e,ret){ /* use: ret.data[0] */ });
-</script>
-```
+    $.ajax({
+        url: $form.attr('action'),
+        data: new FormData( $form[0] ),
+        type: 'post',
+        dataType: "json",
+        processData: false,
+        contentType: false,
+        xhr: function(){
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener("progress", function(evt){ if (evt.lengthComputable) {
+                $(".upload-progress").html(parseInt( (evt.loaded / evt.total)*100, 10) + "%");
+            } }, false);
+            return xhr;
+        },
+    }).always(function() {
+        $(".upload-progress").html(uploadprogress_oldtext);
+    }).done(function(ret){
+        if(ret.required){
+            $.each(ret.required, function(i,field){ 
+                var input = $("[name='"+field+"']", $form);
+                input.addClass("uk-form-danger"); 
+                if(input.hasClass("select2-hidden-accessible")){ input.next().find(".select2-selection").addClass("uk-form-danger") }
+            });
+            $form.prepend('<div class="uk-alert uk-alert-danger"><b>Fill down Required fields</b></div>').scrollTop();
+        }
+        if(ret.success){
+            var modal = $form.closest(".uk-modal");
+            if(typeof modal.data("hide-on-submit") !== 'undefined') UIkit.modal(modal).hide();
+            if(typeof($form.data("trigger")) !== "undefined") $.each( $form.data("trigger").split(","), function(k,trig){
+                $(document).trigger($.trim(trig), ret);
+            });
+            UIkit.notify(ret.success, "success");
+        }
+        if(ret.error) UIkit.notify(ret.error, "danger");
+    });
+});
 
-### json
-```javascript
-{   data: [{ fieldname1:"data", fieldname2:"data" ... }] }
-```
 
 
-## TABLES
-Requires jquery dataTable plugin. This triggers are called from forms after submit.
+// SELECT2
 
-### html
-```html
-    <table id="table"
-        data-trigger-reload="trigger-when-must-reload-alldata" 
-        data-trigger-update="trigger-when-must-update-row"
-        data-trigger-add="trigger-when-must-add-new"
-        data-trigger-delete="trigger-when-must-delete-row" 
-    >
-        <tbody>
-            <tr> <td class="id"> 1 </td> <td> ....
-        </tbody>
-    </table>
-    <script> $("#table").dataTable() </script>
-    <form id="new-item" data-trigger="trigger-when-must-add-new"></form>
-```
-### json
-```javascript
-// add, update, delete
-{ 
-    id: "v_id",
-    data: [["v1","v2"...],["a1","a2"...]....] 
+$("select.select2").each(function(k,o){
+    var sets = {};
+
+    if(typeof $(this).data("ajax--url") == "string") {
+        sets["ajax"] = {};
+        sets["ajax"]["cache"] = $(this).data("ajax--cache")||true;
+        sets["ajax"]["delay"] = $(this).data("ajax--delay")||550;
+        sets["ajax"]["dataType"] = $(this).data("ajax--dataType")||"json";
+        sets["ajax"]["processResults"]=function(d,p){p.page=p.page||1;return{results:d.data||d.results,pagination:{more:(p.page*30)<d.total_count}};};
+    }
+    
+    var ph = $(this).attr("data-placeholder"); 
+    if(typeof ph =="undefined") {
+        $(this).attr("data-placeholder",""); // because a bug with templates
+        ph = "";
+    }else{
+        ph='<span class="uk-text-muted">'+ph+'</span>';
+    }
+    
+    var tSel = $(this).attr("data-templateSelection");
+    if( typeof tSel != "undefined") sets['templateSelection'] = function(s){ if(!s.id || s.id=="undefined") return (s.text!="undefined"?s.text:$(ph)); 
+        if( $(s.element).attr("data-json") ) s = $.parseJSON( $(s.element).attr("data-json") );
+        var template = tSel; $.each(s, function(k,v){ template = template.replace(new RegExp("{{"+k+"}}","g"),v); });
+        return $( '<span>'+template+'</span>' )
+    };
+    
+    var tRes = $(this).attr("data-templateResult");
+    if( typeof tRes != "undefined") sets['templateResult'] = function(s){ if(!s.id||s.id=="undefined") return (s.text!="undefined"?s.text:$(ph)); 
+        if( $(s.element).attr("data-json") ) s = $.parseJSON( $(s.element).attr("data-json") );
+        var template = tRes; $.each(s, function(k,v){ template = template.replace(new RegExp("{{"+k+"}}","g"),v)});
+        return $( '<span>'+template+'</span>' );
+    };
+    
+    $(this).select2(sets);
+});
+
+
+// INIT Data  +  DEPENDANCES
+
+$("select[data-get], input[data-get], textarea[data-get]").each(function(){ _dataGet(this); });
+
+$("select[data-depends-on], input[data-depends-on], textarea[data-depends-on]").each(function(n,obj){ 
+    var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
+    $($.trim(dep[0])).on("change",function(){ _dataGet(obj); }); 
+});
+
+
+function _dataGet(obj){
+    var url = $(obj).data("get");
+    var dep = $(obj).data("depends-on")||''; 
+    if(dep) $.each(dep.split(","), function(k,id){ id=$.trim(id); url += "&"+$(id).attr("name")+"="+$(id).val() });
+    
+    if(typeof $(obj).data("get") == "string") $.getJSON( url ).done(function(ret){ _fillTag(ret); });
+    else _fillTag( {data:$.parseJSON( $(dep).attr("data-json") )} );
+    
+    function _fillTag(ret){
+        switch ( $(obj).prop("tagName") ) {
+            case "TEXTAREA": 
+            case "INPUT": 
+                if(typeof ret.data == "object"){
+                    if(typeof ret.data[0] == "object") ret['data']=ret['data'][0];
+                    $(obj).attr("data-json",JSON.stringify(ret.data));
+                    var d=ret.data[ $(obj).attr("name") ]||ret.data.name||ret.data.text; 
+                    if( $(obj).prop("tagName") == "TEXTAREA")  $(obj).html(d);
+                    else $(obj).val(d);
+                }else{ $(obj).val(ret.data); }
+                break;
+            case "SELECT":  $(obj).html("");
+                $.each(ret.data, function(k,v){ 
+                    $(obj).append('<option data-json=\''+JSON.stringify(v)+'\' value="'+v.id+'">'+(v.text||v.name)+'</option>'); 
+                }); break;
+        }
+        $(obj).trigger("change");
+    }
 }
-OR
-// reload
-{ data: [{"key1":"d1", "key2": "d2"...},{"key1":"a1", "key2":"a2"...}....] }
-```
-
-
-
-
-## FORM Submit
-All forms are offset by AJAX and always sent via POST. To send files not first screen anything extra.
-
-### html
-```html
-<div class="uk-modal" data-hide-on-submit>
-    <form action="url.to.submit" data-trigger="call-back-trigger">
-        <input type="text" name="filename">
-        <input type="file" name="file">
-        <select type="submit">
-            <option> value </option>
-        </select>
-        <button type="submit"> Submit </button>
-    </form>
-</div>
-```
-
-
-### json
-```javascript
-{   success: "Message of success"
-    id: 3,
-    data: [ { "1","2","3" } ]
-}
-OR
-{   required: ["fieldnme1","fieldname2"] }
-OR
-{   error: "Error message" }
-```
-
-
-## DEPENDANCES
-When the value of control depends on the value of another. Depended values are submitted via GET request if is set attribute "data-get". If there are more depended ids, "data change" is activated following a change in the first.
-
-### html
-```html
-<select id="tag_id1" /**dat-json="{k1:v1,...}"**/ ></select>
-
-<select data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
-<input data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
-<textarea data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data"></textarea>
-```
-
-### json
-```javascript
-// input, textarea
-{   data: {"id":"v1","id_field":"v2","name":"v2","text":"v2",...} }
-OR
-// select, input, textarea
-{   data: [{"id":"v1",...}]  }
-OR 
-// input, textarea
-{   data: "v1" }
-```
-
-
-
-## SELECT2
-
-
-```html
- <select class="select2"
-  data-ajax--url="ajax.php?f=..."
-  data-placeholder="bla bla"
-  data-allow-clear="true"
-  data-templateSelection='<i class="{{icon}}"> {{text}}'
-  data-templateResult
-></select>
-```
-
-### json
-```javascript
-{ id: 1, text: "name", icon:"icon" ...}
-```
-
-
-
-## TOGGLE
-Directly to change value without modal
-
-### html
-```html
-    <a  href="url.of.toggle"
-        data-toggle="field"
-        dat-post='{"id":"d1","field2":"field2"}' 
-        data-trigger="call-back-trigger"
-    > Click </a>
-```
-
-### json
-```javascript
-{   
-    id:1, 
-    data: [{"d1","d2",....}],
-    sucess: "Success message"
-}
-```
