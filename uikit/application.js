@@ -37,7 +37,6 @@ $("[data-trigger-update]").each(function(k,t){
 $("[data-trigger-delete]").each(function(k,t){
     $.each($(this).data("trigger-delete").split(","), function(kk,tr){
         $(document).on(tr, function(e, d){
-            //var row = $(t).find("[data-id="+d.id+"]").closest("tr");
             var row = $(t).find(".id:contains("+d.id+")").closest("tr");
             $(row).animate({opacity:0},"slow",function(){ $(t).dataTable().api().row(row).remove().draw(false);  });
         });
@@ -46,8 +45,9 @@ $("[data-trigger-delete]").each(function(k,t){
 $("[data-trigger-add]").each(function(k,t){
     $.each($(this).data("trigger-add").split(","), function(kk,tr){
         $(document).on( tr,function(e, d){
-            $(t).dataTable().api().row.add(d.data[0]).draw(false);
-            $(t).find(".id:contains("+d.id+")").closest("tr").css("opacity",0).animate({opacity:1},"slow");
+            $.when( $(t).dataTable().api().row.add(d.data[0]).draw(false) ).done(function(){
+                $(t).find(".id:contains("+d.id+")").closest("tr").css("opacity",0).animate({opacity:1},"slow");
+            });
         });
     });
 });
