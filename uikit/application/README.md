@@ -145,7 +145,7 @@ When the value of control depends on the value of another. Depended values are s
 
 ### html
 ```html
-<select id="tag_id1"></select>
+<select id="tag_id1" /* dat-json="{k1:v1,...}" */></select>
 
 <select data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
 <input data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
