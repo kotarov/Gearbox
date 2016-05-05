@@ -11,15 +11,6 @@ $.ajaxSetup({
 
 
 // TABLES
-/**
- * elements: table.dataTable
- * 
- * data-trigger-reload
- * data-trigger-update
- * data-trigger-add
- * data-trigger-delete
- * 
- **/
 
 $("[data-trigger-reload]").each(function(k,t){
     $.each( $(this).data("trigger-reload").split(","), function(kk,tr){
@@ -63,13 +54,6 @@ $("[data-trigger-add]").each(function(k,t){
 
 
 // TOGGLE
-/**
- * elements: a
- * 
- * data-toggle
- * data-trigger
- * 
- **/
 
 $(document).on("click","a[data-toggle]",function(e){
     e.preventDefault();
@@ -98,30 +82,6 @@ $(document).on("click","a[data-toggle]",function(e){
 
 
 // FORM
-/**
- * elements: form
- * 
- * action
- * data-get
- * data-trigger
- * 
-/**
- * element: dialog
- * trigger: populted
- * 
-/**
- * elements: a[href][data-uk-modal]
- * 
- * href
- * data-uk-modal
- //* data-id - deprecated
- * data-get="add_extra=parmam&for=get_url"
- * data-populate='{"must":"be","an":"object"}'
- * 
-/** 
- * elements: select[type=submit]
- *
- **/
 
 // Form Init
 
@@ -227,16 +187,6 @@ $("form").submit(function(e){
 
 
 // SELECT2
-/**
- * elements: select.select2
- * 
- * data-ajax--url="ajax.php?f=..."
- * data-placeholder="bla bla"
- * data-allow-clear="true"
- * data-templateSelection='<i class="{{icon}}"> {{text}}'
- * data-templateResult
- * 
- **/
 
 $("select.select2").each(function(k,o){
     var sets = {};
@@ -276,13 +226,6 @@ $("select.select2").each(function(k,o){
 
 
 // INIT Data  +  DEPENDANCES
-/**
- * elements: input, select, textarea
- * 
- * data-get = "ajax.php?f="
- * data-depends-on = "#id_of_tag,#id_of_seond_dependance" //! "change" тригер се прави само за първото id, следващите само се добавят за филтър
- * 
- **/
 
 $("select[data-get], input[data-get], textarea[data-get]").each(function(){ _dataGet(this); });
 
