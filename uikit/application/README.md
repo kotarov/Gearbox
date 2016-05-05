@@ -109,8 +109,13 @@ Requires jquery dataTable plugin. This triggers are called from forms after subm
 ```
 ### json
 ```javascript
-{ data: [["d1","d2"...],["a1","a2"...]....] }
+// add, update, delete
+{ 
+    id: "v_id",
+    data: [["v1","v2"...],["a1","a2"...]....] 
+}
 OR
+// reload
 { data: [{"key1":"d1", "key2": "d2"...},{"key1":"a1", "key2":"a2"...}....] }
 ```
 
