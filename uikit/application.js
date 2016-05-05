@@ -24,7 +24,9 @@ $.ajaxSetup({
 $("[data-trigger-reload]").each(function(k,t){
     $.each( $(this).data("trigger-reload").split(","), function(kk,tr){
         $(document).on($.trim(tr), function(e){
+            $(t).css("opacity",0);
             $(t).DataTable().ajax.reload();
+            $(t).animate({opacity:1},"slow");
         });
     });
 });
@@ -32,8 +34,11 @@ $("[data-trigger-update]").each(function(k,t){
     $.each(  $(this).data("trigger-update").split(","), function(kk,tr){
         $(document).on( tr, function(e, d){
             if(d.id || (d.data && d.data[0] && d.data[0][0])){
-                var row = $(t).find("[data-id="+(d.id?d.id:d.data[0][0])+"]").closest("tr");
+                //var row = $(t).find("[data-id="+(d.id?d.id:d.data[0][0])+"]").closest("tr");
+                var row = $(t).find(".id:contains("+d.id+")").closest("tr");
+                $(row).css("opacity",0);
                 $(t).dataTable().api().row( row ).data(d.data[0]).draw(false);
+                $(row).animate({opacity:1},"slow");
             }
         });
     });
@@ -41,8 +46,9 @@ $("[data-trigger-update]").each(function(k,t){
 $("[data-trigger-delete]").each(function(k,t){
     $.each($(this).data("trigger-delete").split(","), function(kk,tr){
         $(document).on(tr, function(e, d){
-            var row = $(t).find("[data-id="+d.id+"]").closest("tr");
-            $(t).dataTable().api().row(row).remove().draw(false);
+            //var row = $(t).find("[data-id="+d.id+"]").closest("tr");
+            var row = $(t).find(".id:contains("+d.id+")").closest("tr");
+            $(row).animate({opacity:0},"slow",function(){ $(t).dataTable().api().row(row).remove().draw(false);  });
         });
     });
 });
@@ -50,6 +56,7 @@ $("[data-trigger-add]").each(function(k,t){
     $.each($(this).data("trigger-add").split(","), function(kk,tr){
         $(document).on( tr,function(e, d){
             $(t).dataTable().api().row.add(d.data[0]).draw(false);
+            $(t).find(".id:contains("+d.id+")").closest("tr").css("opacity",0).animate({opacity:1},"slow");
         });
     });
 });
@@ -66,17 +73,16 @@ $("[data-trigger-add]").each(function(k,t){
 
 $(document).on("click","a[data-toggle]",function(e){
     e.preventDefault();
-    var //id = $(this).data("id"), //deprecated
-        data_post = $(this).data("post"), // {"id":"","field":"is_active"}
+    var data_post = $(this).data("post"), // {"id":"","field":"is_active"}
         field = $(this).data("toggle"),
         url = $(this).attr("href"),
         trigs = $(this).data("trigger");
-    var d = {};//{id:id}; //deprected
+    var d = {};
     if(typeof data_post=="object") $.each( data_post,function(k,v){
         d[k]=v;
     });
     if(field) d['field'] = field;
-    $.post("ajax.php?f="+url,d).done(function(ret){
+    $.post(url,d).done(function(ret){
         ret = $.parseJSON(ret);
         if(ret.error){
             UIkit.notify(ret.error,"danger");
@@ -138,7 +144,9 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
     });
     if(typeof id_parent !== 'undefined') modal.find("input[name=id_parent]").val(id_parent);
     modal.find("table[data-get]").each(function(){
-        $(this).DataTable().ajax.url("ajax.php?f="+$(this).data("get")+(url_get.indexOf("?")>-1?"&":"?")+data_get).load();
+        var table_get = $(this).data("get");
+        if(typeof data_get == "string") table_get += (table_get.indexOf("?") > -1 ? "&" :"?") + data_get;
+        $(this).DataTable().ajax.url( table_get ).load();
     });
     if(typeof url_get !== 'undefined'){
         $.getJSON(url_get+(url_get.indexOf("?")>-1?"&":"?")+data_get).done(function(ret){
@@ -252,15 +260,15 @@ $("select.select2").each(function(k,o){
     var tSel = $(this).attr("data-templateSelection");
     if( typeof tSel != "undefined") sets['templateSelection'] = function(s){ if(!s.id || s.id=="undefined") return (s.text!="undefined"?s.text:$(ph)); 
         if( $(s.element).attr("data-json") ) s = $.parseJSON( $(s.element).attr("data-json") );
-        var template = tSel; $.each(s, function(k,v){  template = template.replace('{{'+k+'}}',v); });
-        return $( '<div>'+template+'</div>' )
+        var template = tSel; $.each(s, function(k,v){ template = template.replace(new RegExp("{{"+k+"}}","g"),v); });
+        return $( '<span>'+template+'</span>' )
     };
     
     var tRes = $(this).attr("data-templateResult");
     if( typeof tRes != "undefined") sets['templateResult'] = function(s){ if(!s.id||s.id=="undefined") return (s.text!="undefined"?s.text:$(ph)); 
         if( $(s.element).attr("data-json") ) s = $.parseJSON( $(s.element).attr("data-json") );
-        var template = tRes; $.each(s, function(k,v){ template = template.replace('{{'+k+'}}',v)});
-        return $( '<div>'+template+'</div>' );
+        var template = tRes; $.each(s, function(k,v){ template = template.replace(new RegExp("{{"+k+"}}","g"),v)});
+        return $( '<span>'+template+'</span>' );
     };
     
     $(this).select2(sets);
@@ -289,15 +297,26 @@ function _dataGet(obj){
     var dep = $(obj).data("depends-on")||''; 
     if(dep) $.each(dep.split(","), function(k,id){ id=$.trim(id); url += "&"+$(id).attr("name")+"="+$(id).val() });
     
-    $.getJSON( url ).done(function(ret){  
+    if(typeof $(obj).data("get") == "string") $.getJSON( url ).done(function(ret){ _fillTag(ret); });
+    else _fillTag( {data:$.parseJSON( $(dep).attr("data-json") )} );
+    
+    function _fillTag(ret){
         switch ( $(obj).prop("tagName") ) {
-            case "TEXTAREA": var d=ret.data.name||ret.data.text; $(obj).html(d); $(obj).attr("data-json",JSON.stringify(ret.data)); break;
-            case "INPUT": var d=ret.data.name||ret.data.text; $(obj).val(d); $(obj).attr("data-json",JSON.stringify(ret.data));break;
+            case "TEXTAREA": 
+            case "INPUT": 
+                if(typeof ret.data == "object"){
+                    if(typeof ret.data[0] == "object") ret['data']=ret['data'][0];
+                    $(obj).attr("data-json",JSON.stringify(ret.data));
+                    var d=ret.data[ $(obj).attr("name") ]||ret.data.name||ret.data.text; 
+                    if( $(obj).prop("tagName") == "TEXTAREA")  $(obj).html(d);
+                    else $(obj).val(d);
+                }else{ $(obj).val(ret.data); }
+                break;
             case "SELECT":  $(obj).html("");
                 $.each(ret.data, function(k,v){ 
                     $(obj).append('<option data-json=\''+JSON.stringify(v)+'\' value="'+v.id+'">'+(v.text||v.name)+'</option>'); 
                 }); break;
         }
         $(obj).trigger("change");
-    });
+    }
 }
