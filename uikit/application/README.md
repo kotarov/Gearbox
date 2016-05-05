@@ -146,12 +146,22 @@ When the value of control depends on the value of another. Depended values are s
 ### html
 ```html
 <select id="tag_id1"></select>
+
+<select data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
 <input data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
+<textarea data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data"></textarea>
 ```
 
 ### json
 ```javascript
-{ data: [{"id":"d1","text":"d2",...}]  }
+// input, textarea
+{   data: {"id":"v1","id_field":"v2","name":"v2","text":"v2",...} }
+OR
+// select, input, textarea
+{   data: [{"id":"v1",...}]  }
+OR 
+// input, textarea
+{   data: "v1" }
 ```
 
 
