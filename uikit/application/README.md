@@ -207,7 +207,7 @@ Directly to change value without modal
 ```html
     <a  href="url.of.toggle"
         data-toggle="field"
-        dat-post='{"id":"d1","field2":"field2"}' 
+        data-post='{"id":"d1","field2":"field2"}' 
         data-trigger="call-back-trigger"
     > Click </a>
 ```
