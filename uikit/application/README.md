@@ -160,9 +160,10 @@ When the value of control depends on the value of another. Depended values are s
 ```html
 <select id="tag_id1" /**dat-json="{k1:v1,...}"**/ ></select>
 
-<select data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
-<input data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
-<textarea data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data"></textarea>
+<select name="n1" data-value-depends-on="#tag_id1,#tag_id2" data-get="url.of.init.data"></select>
+<select name="n2" data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
+<input name="n3" data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data">
+<textarea name="n4" data-depends-on="#tag_id1,#tag_id2" data-get="url.of.new.data"></textarea>
 ```
 
 ### json
