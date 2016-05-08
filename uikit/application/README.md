@@ -191,11 +191,22 @@ OR
   data-templateSelection='<i class="{{icon}}"> {{text}}'
   data-templateResult
 ></select>
+...
+// tags
+<select class="select2" 
+    multiple
+    data-tags="true" 
+    data-tokenSeparators='[",", " "]' 
+    name="tags[]"
+></select>
 ```
 
 ### json
 ```javascript
 { id: 1, text: "name", icon:"icon" ...}
+...
+// tags
+[ "v1", "v2",...]
 ```
 
 
