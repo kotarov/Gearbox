@@ -86,8 +86,7 @@ $(document).on("click","a[data-toggle]",function(e){
 // Form Init
 
 $(document).on("click","a[href][data-uk-modal]", function(e){
-    var id = $(this).data("id"),
-        data_get=$(this).data("get"),
+    var data_get=$(this).data("get"),
         populate=$(this).data("populate"),
         id_parent = $(this).closest(".uk-modal").find("input[name=id]").val(),
         modal = $($(this).attr("href")),
@@ -95,14 +94,18 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
         form = modal.find("form")[0];
         
     if(typeof form !== 'undefined') form.reset();
-    modal.find("select").find("[selected]").not("[data-ajax--url]").prop("selected",false).trigger("change");
+    modal.find("select").not("[data-ajax--url]").find("[selected]").prop("selected",false).trigger("change");
+    modal.find("select.select2[data-tags]").html("").trigger("change");
     modal.find("select.select2[data-ajax--url]").html("").trigger("change");
     modal.find(".uk-form-danger").removeClass('uk-form-danger');
     modal.find(".uk-alert").remove();
     if(typeof populate == "object") $.each(populate,function(k,v){
         modal.find("[name='"+k+"']").each(function(){ if($(this).prop("tagName")=="INPUT") $(this).val(v); else $(this).text(v); });
     });
-    if(typeof id_parent !== 'undefined') modal.find("input[name=id_parent]").val(id_parent);
+    if(typeof id_parent !== 'undefined') modal.find("[name=id_parent]").each(function(){
+        if($(this).prop("tagName") == "INPUT") $(this).val(id_parent)
+        else $(this).html(id_parent);
+    });
     modal.find("table[data-get]").each(function(){
         var table_get = $(this).data("get");
         if(typeof data_get == "string") table_get += (table_get.indexOf("?") > -1 ? "&" :"?") + data_get;
@@ -113,11 +116,25 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
             if(ret.data && ret.data[0]) $.each(ret.data[0], function(k,v){
                 modal.find("[name='"+k+"']").each(function(r,input){ input = $(this);
                     if(input.prop("tagName") == "SELECT"){
-                        if(v) $.each(v.split(","),function(kk,vv){ $("option[value='"+vv+"']",input).prop("selected",true); });
-                        input.trigger("change");
-                    }else if($.inArray(input.prop("tagName"), ["INPUT","TEXTAREA"]) > -1 ){
+                        if(v)$.each(v.split(","),function(kk,vv){ 
+                                var opt = $(input).find("option[value='"+vv+"']");
+                                if(typeof $(opt).prop("tagName") == "undefined"){$(input).append('<option value="'+vv+'">'+vv+'</option>');}
+                                $("option[value='"+vv+"']",input).prop("selected",true); 
+                            });
+                            input.trigger("change");
+                    }else if(input.prop("tagName") == "INPUT"){
                         if(input.attr("type") == "checkbox") input.prop("checked",v);
                         else input.val(v);
+                        input.trigger("change");
+                    }else if( input.prop("tagName") == "TEXTAREA" ){
+                        
+                        if(typeof input.attr("data-uk-htmleditor") !== "undefined"){
+                            var editor = $('.CodeMirror')[0].CodeMirror;
+                            editor.setValue(v);
+                        }else{
+                            input.html(v);
+                            input.trigger("change");
+                        }
                     }else {
                         if( input.hasClass("uk-switcher")) {  
                             input.children("[data-value]").removeClass("uk-active");
@@ -198,6 +215,8 @@ $("select.select2").each(function(k,o){
         sets["ajax"]["dataType"] = $(this).data("ajax--dataType")||"json";
         sets["ajax"]["processResults"]=function(d,p){p.page=p.page||1;return{results:d.data||d.results,pagination:{more:(p.page*30)<d.total_count}};};
     }
+    if(typeof $(this).data("tags") == "boolean" ) sets["tags"] = true;
+    if(typeof $(this).attr("data-tokenSeparators")  !== "undefined") sets['tokenSeparators'] = $(this).attr("data-tokenSeparators");
     
     var ph = $(this).attr("data-placeholder"); 
     if(typeof ph =="undefined") {
@@ -227,35 +246,47 @@ $("select.select2").each(function(k,o){
 
 // INIT Data  +  DEPENDANCES
 
-$("select[data-get], input[data-get], textarea[data-get]").each(function(){ _dataGet(this); });
+$("select[data-get], input[data-get], textarea[data-get]").each(function(){ if(typeof $(this).data("depends-on") ==="undefined" ) _dataGet(this, $(this).data("get") ); });
 
-$("select[data-depends-on], input[data-depends-on], textarea[data-depends-on]").each(function(n,obj){ 
-    var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
-    $($.trim(dep[0])).on("change",function(){ _dataGet(obj); }); 
+
+$("select[data-value-depends-on]").each(function(n,obj){
+    var dep = $(obj).data("value-depends-on")||''; dep = dep.split(",");
+    $($.trim(dep[0])).on("change",function(){ 
+        var d = $.parseJSON( $(dep[0]).attr("data-json") );
+        $(obj).find("[selected]").prop("selected",false);
+        $(obj).find("option[value="+d[$(obj).prop("name")]+"]").prop("selected",true);    
+    }); 
 });
 
+//$("select[data-content-depends-on], input[data-content-depends-on], textarea[data-content-depends-on]").each(function(n,obj){ 
+$("select[data-depends-on], input[data-depends-on], textarea[data-depends-on]").each(function(n,obj){ 
+    var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
+    $($.trim(dep[0])).on("change",function(){ _dataGet(obj,$(obj).data("get")); }); 
+});
 
-function _dataGet(obj){
-    var url = $(obj).data("get");
+function _dataGet(obj,url){
+    //var url = $(obj).data("get");
     var dep = $(obj).data("depends-on")||''; 
-    if(dep) $.each(dep.split(","), function(k,id){ id=$.trim(id); url += "&"+$(id).attr("name")+"="+$(id).val() });
-    
-    if(typeof $(obj).data("get") == "string") $.getJSON( url ).done(function(ret){ _fillTag(ret); });
-    else _fillTag( {data:$.parseJSON( $(dep).attr("data-json") )} );
+    if(typeof url == "string"){
+        $.each(dep.split(","), function(k,id){ id=$.trim(id); url += "&"+$(id).attr("name")+"="+$(id).val() });
+        $.getJSON( url ).done(function(ret){ _fillTag(ret); });
+    }else _fillTag( {data:$.parseJSON( $(dep).attr("data-json") )} );
     
     function _fillTag(ret){
+        if(ret.data===false) ret.data="";
         switch ( $(obj).prop("tagName") ) {
             case "TEXTAREA": 
             case "INPUT": 
                 if(typeof ret.data == "object"){
                     if(typeof ret.data[0] == "object") ret['data']=ret['data'][0];
                     $(obj).attr("data-json",JSON.stringify(ret.data));
-                    var d=ret.data[ $(obj).attr("name") ]||ret.data.name||ret.data.text; 
+                    var d=ret.data[ $(obj).attr("name") ]||ret.data.name||ret.data.text;
                     if( $(obj).prop("tagName") == "TEXTAREA")  $(obj).html(d);
                     else $(obj).val(d);
                 }else{ $(obj).val(ret.data); }
                 break;
-            case "SELECT":  $(obj).html("");
+            case "SELECT":  
+                $(obj).html("");
                 $.each(ret.data, function(k,v){ 
                     $(obj).append('<option data-json=\''+JSON.stringify(v)+'\' value="'+v.id+'">'+(v.text||v.name)+'</option>'); 
                 }); break;
