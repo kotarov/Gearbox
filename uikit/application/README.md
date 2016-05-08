@@ -205,8 +205,8 @@ OR
 ```javascript
 { id: 1, text: "name", icon:"icon" ...}
 ...
-// tags
-[ "v1", "v2",...]
+// tags in form init 
+{ data:{ "name[]":"tag1,tag2,tag3..."}}
 ```
 
 
