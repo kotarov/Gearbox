@@ -1,14 +1,3 @@
-$.ajaxSetup({
-    dataFilter: function(data,type){
-        try{var a = data;
-            if(typeof data != "object") a=$.parseJSON(data); 
-	        if(a.access_denided) window.location.href="index.php";
-	        if(a.error) window.UIkit.notify("<b>Error</b> "+a.error,"warning");
-	        if(a.redirect) widow.location.href = a.redirect;
-        } catch(e){} return data;
-    },
-});
-
 
 // TABLES
 
@@ -94,9 +83,11 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
         form = modal.find("form")[0];
         
     if(typeof form !== 'undefined') form.reset();
-    modal.find("select").not("[data-ajax--url]").find("[selected]").prop("selected",false).trigger("change");
-    modal.find("select.select2[data-tags]").html("").trigger("change");
-    modal.find("select.select2[data-ajax--url]").html("").trigger("change");
+    modal.find("select").find("[selected]").prop("selected",false);
+    modal.find("select.select2[data-ajax--url]").html("");
+    modal.find("select").trigger("change");
+
+    if ( $.isFunction(UIkit.htmleditor) )  $('.CodeMirror')[0].CodeMirror.setValue("");
     modal.find(".uk-form-danger").removeClass('uk-form-danger');
     modal.find(".uk-alert").remove();
     if(typeof populate == "object") $.each(populate,function(k,v){
@@ -127,10 +118,10 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
                         else input.val(v);
                         input.trigger("change");
                     }else if( input.prop("tagName") == "TEXTAREA" ){
-                        
                         if(typeof input.attr("data-uk-htmleditor") !== "undefined"){
                             var editor = $('.CodeMirror')[0].CodeMirror;
                             editor.setValue(v);
+                            editor.setOption("mode",$(input).data("mode")||"text/html");
                         }else{
                             input.html(v);
                             input.trigger("change");
@@ -258,7 +249,6 @@ $("select[data-value-depends-on]").each(function(n,obj){
     }); 
 });
 
-//$("select[data-content-depends-on], input[data-content-depends-on], textarea[data-content-depends-on]").each(function(n,obj){ 
 $("select[data-depends-on], input[data-depends-on], textarea[data-depends-on]").each(function(n,obj){ 
     var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
     $($.trim(dep[0])).on("change",function(){ _dataGet(obj,$(obj).data("get")); }); 
@@ -280,7 +270,8 @@ function _dataGet(obj,url){
                 if(typeof ret.data == "object"){
                     if(typeof ret.data[0] == "object") ret['data']=ret['data'][0];
                     $(obj).attr("data-json",JSON.stringify(ret.data));
-                    var d=ret.data[ $(obj).attr("name") ]||ret.data.name||ret.data.text;
+                    var d=ret.data[ $(obj).attr("name") ];
+                    if(typeof d == "undefined") d = ret.data.text||ret.data.name;
                     if( $(obj).prop("tagName") == "TEXTAREA")  $(obj).html(d);
                     else $(obj).val(d);
                 }else{ $(obj).val(ret.data); }
