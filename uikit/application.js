@@ -1,5 +1,5 @@
 
-// TABLES
+// TABLE triggers
 
 $("[data-trigger-reload]").each(function(k,t){
     $.each( $(this).data("trigger-reload").split(","), function(kk,tr){
@@ -39,6 +39,24 @@ $("[data-trigger-add]").each(function(k,t){
             });
         });
     });
+});
+
+
+// dataTables
+
+$("table.dataTable").each(function(k,t){
+    if ( $.fn.DataTable.isDataTable(t) ) return;
+    
+    var p = {'columnDefs':[]};
+    $.each( $(t).data(), function(a,v){ p[a] = v; });
+    $(t).find("thead > tr > *").each(function(l,h){ 
+        p['columnDefs'][l] = {'targets': l};
+        $.each( $(h).data(), function(a,v){ 
+            if(a == "render") p['columnDefs'][l]['render'] = function(d,t,r){ return eval(v); };
+            else p['columnDefs'][l][a] = v;
+        });
+    });
+    $(t).dataTable(p);
 });
 
 
