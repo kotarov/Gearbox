@@ -297,7 +297,7 @@ function _dataGet(obj,url){
             case "SELECT":  
                 $(obj).html("");
                 $.each(ret.data, function(k,v){ 
-                    $(obj).append('<option data-json=\''+JSON.stringify(v)+'\' value="'+v.id+'">'+(v.text||v.name)+'</option>'); 
+                    $(obj).append('<option data-json=\''+JSON.stringify(v)+'\' value="'+v.id+'">'+(v.text||v.name||v.title)+'</option>'); 
                 }); break;
         }
         $(obj).trigger("change");
