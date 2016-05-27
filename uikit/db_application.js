@@ -171,7 +171,8 @@ $("form").submit(function(e){
     $form.find(".uk-switcher>*").each(function(){$(this).find("[type=hidden]").prop("disabled",!$(this).hasClass("uk-active"))});
     $form.find(".uk-form-danger").removeClass('uk-form-danger');
     $form.find(".uk-alert").remove();
-
+    if (typeof(tinyMCE) != "undefined") tinyMCE.triggerSave(); 
+    
     var uploadprogress_oldtext = $(".upload-progress").html();    
     
     $.ajax({
@@ -318,4 +319,11 @@ $(".page-sparkline").each(function(k,v){
             };
         $(v).sparkline(ret.data, $.extend(sets,ret.sets) );
     });
+});
+
+// tinyMCE
+$("[name][data-tinymce]").each(function(k,t){
+    var p = {selector:"[name='"+$(t).attr("name")+"']" };
+    $.each( $(t).data(), function(a,v){ p[a] = v; });
+    tinymce.init(p);
 });
