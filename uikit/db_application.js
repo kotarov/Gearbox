@@ -315,7 +315,7 @@ $(".page-sparkline").each(function(k,v){
                 defaultPixelsPerValue:10,
                 tooltipSuffix:m,
                 tooltipFormat: '{{x:levels}} {{prefix}} - {{y}} {{suffix}}',
-                tooltipValueLookups: {levels: $.range_map({ ':1': 'January', '1:2': 'Februry', '2:3': 'March','3:4':'April','4:5':'May','5:6':'Jun','6:7':'Jul','7:8':'August','8:9':'September','10':'Octomber','11':'November','12':'December' }) }
+                tooltipValueLookups: {levels: $.range_map({ ':0':'','0:1': 'January', '1:2': 'Februry', '2:3': 'March','3:4':'April','4:5':'May','5:6':'Jun','6:7':'Jul','7:8':'August','8:9':'September','10':'Octomber','11':'November','12':'December' }) }
             };
         $(v).sparkline(ret.data, $.extend(sets,ret.sets) );
     });
