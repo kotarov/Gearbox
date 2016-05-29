@@ -1,3 +1,7 @@
+// LANG
+
+if(typeof( window['lang'] ) !== 'object') {var lang = {};}
+
 
 // TABLE triggers
 
@@ -213,11 +217,6 @@ $("form").submit(function(e){
 });
 
 
-// TRANSLATE
-if(typeof( window['lang'] ) !== 'object'){ 
-    $.getJSON('langs/get.php').done(function(ret){ lang = ret;}).fail(function(){lang={};}); 
-}
-
 // SELECT2
 
 $("select.select2").each(function(k,o){
@@ -274,7 +273,7 @@ $("select[data-value-depends-on]").each(function(n,obj){
 });
 
 $("select[data-depends-on], input[data-depends-on], textarea[data-depends-on]").each(function(n,obj){ 
-    var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
+    var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
     $($.trim(dep[0])).on("change",function(){ _dataGet(obj,$(obj).data("get")); }); 
 });
 
