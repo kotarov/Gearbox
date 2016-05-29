@@ -167,7 +167,7 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
 
 $("select[type=submit]").on("change",function(e){if($(this).val()!='' && $(this).val()!=0 && $(this).val()!==null) $(this).closest("form").submit()});
 
-$("form").submit(function(e){ 
+$("form").not(".no-ajax").submit(function(e){ 
     e.preventDefault();
     var $form = $(this);
     
