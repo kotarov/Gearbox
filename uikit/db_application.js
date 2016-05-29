@@ -198,7 +198,8 @@ $("form").submit(function(e){
                 input.addClass("uk-form-danger"); 
                 if(input.hasClass("select2-hidden-accessible")){ input.next().find(".select2-selection").addClass("uk-form-danger") }
             });
-            $form.prepend('<div class="uk-alert uk-alert-danger"><b>Fill down Required fields</b></div>').scrollTop();
+            var msg = 'Fill down Required fields';
+            $form.prepend('<div class="uk-alert uk-alert-danger"><b>'+(dict[msg]||msg)+'</b></div>').scrollTop();
         }
         if(ret.success){
             var modal = $form.closest(".uk-modal");
@@ -213,6 +214,15 @@ $("form").submit(function(e){
 });
 
 
+// TRANSLATE
+/*
+if(typeof( window['dictionary'] ) !== 'object'){ 
+    $.getJSON('ajax.php?f=getDictionary').done(function(ret){window['dictionsry']=ret;}) 
+}
+function trn(st){
+    return window['dictionary'][st]||st;
+}
+*/
 
 // SELECT2
 
