@@ -37,7 +37,7 @@ $("[data-trigger-delete]").each(function(k,t){
 $("[data-trigger-add]").each(function(k,t){
     $.each($(this).data("trigger-add").split(","), function(kk,tr){
         $(document).on( tr,function(e, d){
-            if(typeof d.id == "undefined")
+            //if(typeof d.id == "undefined")
             $.when( $(t).dataTable().api().row.add(d.data[0]).draw(false) ).done(function(){
                 $(t).find(".id:contains("+d.id+")").closest("tr").css("opacity",0).animate({opacity:1},"slow");
             });
