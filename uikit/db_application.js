@@ -14,7 +14,6 @@ $("[data-trigger-update]").each(function(k,t){
     $.each(  $(this).data("trigger-update").split(","), function(kk,tr){
         $(document).on( tr, function(e, d){
             if(d.id || (d.data && d.data[0] && d.data[0][0])){
-                //var row = $(t).find("[data-id="+(d.id?d.id:d.data[0][0])+"]").closest("tr");
                 var row = $(t).find(".id:contains("+d.id+")").closest("tr");
                 $(row).css("opacity",0);
                 $(t).dataTable().api().row( row ).data(d.data[0]).draw(false);
@@ -65,7 +64,7 @@ $("table.dataTable").each(function(k,t){
 
 $(document).on("click","a[data-toggle]",function(e){
     e.preventDefault();
-    var data_post = $(this).data("post"), // {"id":"","field":"is_active"}
+    var data_post = $(this).data("post"), 
         field = $(this).data("toggle"),
         url = $(this).attr("href"),
         trigs = $(this).data("trigger");
@@ -199,7 +198,7 @@ $("form").submit(function(e){
                 if(input.hasClass("select2-hidden-accessible")){ input.next().find(".select2-selection").addClass("uk-form-danger") }
             });
             var msg = 'Fill down Required fields';
-            $form.prepend('<div class="uk-alert uk-alert-danger"><b>'+(window['dict'][msg]||msg)+'</b></div>').scrollTop();
+            $form.prepend('<div class="uk-alert uk-alert-danger"><b>'+(lang[msg]||msg)+'</b></div>').scrollTop();
         }
         if(ret.success){
             var modal = $form.closest(".uk-modal");
@@ -215,15 +214,9 @@ $("form").submit(function(e){
 
 
 // TRANSLATE
-if(typeof( window['dict'] ) !== 'undefiend') window['dict'] = {};
-/*
-if(typeof( window['dict'] ) !== 'object'){ 
-    $.getJSON('ajax.php?f=getDictionary').done(function(ret){window['dictionsry']=ret;}) 
+if(typeof( window['lang'] ) !== 'object'){ 
+    $.getJSON('langs/get.php').done(function(ret){ lang = ret;}).fail(function(){lang={};}); 
 }
-function trn(st){
-    return window['dictionary'][st]||st;
-}
-*/
 
 // SELECT2
 
@@ -242,7 +235,7 @@ $("select.select2").each(function(k,o){
     
     var ph = $(this).attr("data-placeholder"); 
     if(typeof ph =="undefined") {
-        $(this).attr("data-placeholder",""); // because a bug with templates
+        $(this).attr("data-placeholder",""); // because a bug with select2 templates
         ph = "";
     }else{
         ph='<span class="uk-text-muted">'+ph+'</span>';
@@ -281,7 +274,7 @@ $("select[data-value-depends-on]").each(function(n,obj){
 });
 
 $("select[data-depends-on], input[data-depends-on], textarea[data-depends-on]").each(function(n,obj){ 
-    var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
+    var dep = $(obj).data("depends-on")||''; dep = dep.split(",");
     $($.trim(dep[0])).on("change",function(){ _dataGet(obj,$(obj).data("get")); }); 
 });
 
@@ -326,7 +319,7 @@ $(".page-sparkline").each(function(k,v){
                 defaultPixelsPerValue:10,
                 tooltipSuffix:m,
                 tooltipFormat: '{{x:levels}} {{prefix}} - {{y}} {{suffix}}',
-                tooltipValueLookups: {levels: $.range_map({ ':0':'','0:1': 'January', '1:2': 'Februry', '2:3': 'March','3:4':'April','4:5':'May','5:6':'Jun','6:7':'Jul','7:8':'August','8:9':'September','10':'Octomber','11':'November','12':'December' }) }
+                tooltipValueLookups: {levels: $.range_map({ ':0':'','0:1': (lang['January']||'January'), '1:2': (lang['February']||'February'), '2:3': (lang['March']||'March'),'3:4':(lang['April']||'April'),'4:5':(lang['May']||'May'),'5:6':(lang['June']||'June'),'6:7':(lang['July']||'July'),'7:8':(lang['August']||'August'),'8:9':(lang['September']||'September'),'10':(lang['Octomber']||'Octomber'),'11':(lang['November']||'November'),'12':(lang['December']||'December') }) }
             };
         $(v).sparkline(ret.data, $.extend(sets,ret.sets) );
     });
