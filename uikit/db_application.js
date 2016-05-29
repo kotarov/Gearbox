@@ -80,12 +80,12 @@ $(document).on("click","a[data-toggle]",function(e){
     $.post(url,d).done(function(ret){
         ret = $.parseJSON(ret);
         if(ret.error){
-            UIkit.notify(ret.error,"danger");
+            UIkit.notify((lang[ret.error]||ret.error),"danger");
         }else if(ret.success){
             if(typeof trigs !== 'undefined') $.each( trigs.split(","), function(k,trig){    
                 $(document).trigger($.trim(trig), ret);
             })
-            UIkit.notify(ret.success,"success");
+            UIkit.notify((lang[ret.success]||ret.success),"success");
         }
     });
 });
