@@ -199,7 +199,7 @@ $("form").submit(function(e){
                 if(input.hasClass("select2-hidden-accessible")){ input.next().find(".select2-selection").addClass("uk-form-danger") }
             });
             var msg = 'Fill down Required fields';
-            $form.prepend('<div class="uk-alert uk-alert-danger"><b>'+(dict[msg]||msg)+'</b></div>').scrollTop();
+            $form.prepend('<div class="uk-alert uk-alert-danger"><b>'+(window['dict'][msg]||msg)+'</b></div>').scrollTop();
         }
         if(ret.success){
             var modal = $form.closest(".uk-modal");
