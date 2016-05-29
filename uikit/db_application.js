@@ -215,8 +215,9 @@ $("form").submit(function(e){
 
 
 // TRANSLATE
+if(typeof( window['dict'] ) !== 'undefiend') window['dict'] = {};
 /*
-if(typeof( window['dictionary'] ) !== 'object'){ 
+if(typeof( window['dict'] ) !== 'object'){ 
     $.getJSON('ajax.php?f=getDictionary').done(function(ret){window['dictionsry']=ret;}) 
 }
 function trn(st){
