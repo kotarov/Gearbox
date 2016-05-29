@@ -210,9 +210,9 @@ $("form").submit(function(e){
             if(typeof($form.data("trigger")) !== "undefined") $.each( $form.data("trigger").split(","), function(k,trig){
                 $(document).trigger($.trim(trig), ret);
             });
-            UIkit.notify(ret.success, "success");
+            UIkit.notify( (lang[ret.success]||ret.success), "success");
         }
-        if(ret.error) UIkit.notify(ret.error, "danger");
+        if(ret.error) UIkit.notify( (lang[ret.error]||ret.error), "danger");
     });
 });
 
