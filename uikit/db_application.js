@@ -176,7 +176,8 @@ $("form").not(".no-ajax").submit(function(e){
     $form.find(".uk-alert").remove();
     if (typeof(tinyMCE) != "undefined") tinyMCE.triggerSave(); 
     
-    var uploadprogress_oldtext = $(".upload-progress").html();    
+    var uploadprogress_oldtext = [];
+    $(".upload-progress").each(function(k,v){ uploadprogress_oldtext.push( $(this).html() );  });  
     
     $.ajax({
         url: $form.attr('action'),
@@ -193,7 +194,7 @@ $("form").not(".no-ajax").submit(function(e){
             return xhr;
         },
     }).always(function() {
-        $(".upload-progress").html(uploadprogress_oldtext);
+        $(".upload-progress").each(function(k,v){ $(this).html( uploadprogress_oldtext[k] ); });
     }).done(function(ret){
         if(ret.required){
             $.each(ret.required, function(i,field){ 
