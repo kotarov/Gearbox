@@ -144,6 +144,8 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
                             var editor = $('.CodeMirror')[0].CodeMirror;
                             editor.setValue(v);
                             editor.setOption("mode",$(input).data("mode")||"text/html");
+                        }else if( input.attr("data-tinymce") !== "undefined" ){
+                            tinyMCE.get( $(input).attr("id") ).setContent(v);
                         }else{
                             input.html(v);
                             input.trigger("change");
