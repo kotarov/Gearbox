@@ -145,7 +145,8 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
                             editor.setValue(v);
                             editor.setOption("mode",$(input).data("mode")||"text/html");
                         }else if( input.attr("data-tinymce") !== "undefined" ){
-                            tinyMCE.get( $(input).attr("id") ).setContent(v);
+                            var input_id = $(input).attr("id");
+                            if(typeof input_id == "string") tinyMCE.get( id ).setContent(v);
                         }else{
                             input.html(v);
                             input.trigger("change");
