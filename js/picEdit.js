@@ -4,6 +4,12 @@
  *  Author: Andy V.
  *  License: MIT
  */
+ /* Usage:
+  <form class="no-ajax" method="post" action="http://url.to.submit">
+  	<input type="file" name="images[]" class="picEdit"> 
+  </form>
+  <script> $('.picEdit').picEdit(); </script>
+ */
 
 // the semi-colon before function invocation is a safety net against concatenated
 // scripts and/or other plugins which may not be closed properly.
