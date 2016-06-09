@@ -11,13 +11,14 @@ tfoot td.sum, tfoot th.sum {font-style:normal; font-size:1.2em;}
 .uk-dropdown {box-shadow: 5px 5px 5px rgba(0,0,0,0.05) }
 sup.uk-badge {font-size:0.6em;position:relative;top:-1em;left:-1em;padding:0 0.3em; line-height:1.5em;}
 [readonly] {background:transparent!important;border-color:#efefef!important;}
+.uk-navbar-brand {max-width:100%}
+
 @media (min-width: 960px){
     .uk-form-horizontal .uk-form-label { width: 120px}
     .uk-form-horizontal .uk-form-controls { margin-left: 135px; }
 }
-.uk-navbar-brand {max-width:100%}
-@media (min-width: 768px) {
-    .uk-form.uk-form-horizontal .uk-grid{margin-left:0;}
+@media (max-width: 768px) {
+    .uk-form-horizontal .uk-grid{margin-left:0px}
 }
 
 /* New */
