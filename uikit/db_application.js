@@ -94,7 +94,7 @@ $(document).on("click","a[data-toggle]",function(e){
 
 // FORM
 
-// Form Init
+// Form Init / Populate
 
 $(document).on("click","a[href][data-uk-modal]", function(e){
     var data_get=$(this).data("get"),
@@ -113,7 +113,11 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
     modal.find(".uk-form-danger").removeClass('uk-form-danger');
     modal.find(".uk-alert").remove();
     if(typeof populate == "object") $.each(populate,function(k,v){
-        modal.find("[name='"+k+"']").each(function(){ if($(this).prop("tagName")=="INPUT") $(this).val(v); else $(this).text(v); });
+        modal.find("[name='"+k+"']").each(function(){ 
+            if($(this).prop("tagName")=="INPUT") $(this).val(v); 
+            else if($(this).prop("tagName")=="IMG") $(this).attr("src",v);
+            else $(this).text(v); 
+        });
     });
     if(typeof id_parent !== 'undefined') modal.find("[name=id_parent]").each(function(){
         if($(this).prop("tagName") == "INPUT") $(this).val(id_parent)
