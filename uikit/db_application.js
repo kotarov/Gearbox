@@ -135,7 +135,7 @@ $(document).on("click","a[href][data-uk-modal]", function(e){
                     if(input.prop("tagName") == "SELECT"){
                         if(v)$.each(v.split(","),function(kk,vv){ 
                                 var opt = $(input).find("option[value='"+vv+"']");
-                                if(typeof $(opt).prop("tagName") == "undefined"){$(input).append('<option value="'+vv+'">'+vv+'</option>');}
+                                if(typeof $(opt).prop("tagName") == "undefined"){$(input).append('<option value="'+vv+'">'+(ret.data[0]['name']||ret.data[0]['text']||vv)+'</option>');}
                                 $("option[value='"+vv+"']",input).prop("selected",true); 
                             });
                             input.trigger("change");
