@@ -18,7 +18,7 @@ sup.uk-badge {font-size:0.6em;position:relative;top:-1em;left:-1em;padding:0 0.3
     .uk-form-horizontal .uk-form-controls { margin-left: 135px; }
 }
 @media (max-width: 960px) {
-    .uk-form-horizontal > .uk-form-row > .uk-grid{margin-left:0px}
+    .uk-form-horizontal .uk-form-controls.uk-grid{margin-left:0px}
 }
 
 /* New */
