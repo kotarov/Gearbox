@@ -30,9 +30,7 @@ sup.uk-badge {font-size:0.6em;position:relative;top:-1em;left:-1em;padding:0 0.3
 td.actions {background-color: rgba(0,0,0,0.015);}
 
 /*** select 2 */
-.select2-container--default .select2-selection--single,
-.select2-container--default .select2-selection--multiple,
-.select2-container--default.select2-container--focus .select2-selection--multiple 
+.select2-container--default .select2-selection--single
 { border-color: #ddd; border-radius:0;height:30px;}
 
 .select2-search__field { height:22px!important;}
