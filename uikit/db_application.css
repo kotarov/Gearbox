@@ -31,7 +31,11 @@ td.actions {background-color: rgba(0,0,0,0.015);}
 
 /*** select 2 */
 .select2-container--default .select2-selection--single
-{ border-color: #ddd; border-radius:0;height:30px;}
+{ height:30px;}
+.select2-container--default .select2-selection--single,
+ -.select2-container--default .select2-selection--multiple,
+ -.select2-container--default.select2-container--focus .select2-selection--multiple
+ {border-color: #ddd; border-radius:0;}
 
 .select2-search__field { height:22px!important;}
 
