@@ -218,6 +218,7 @@ $("form").not(".no-ajax").submit(function(e){
                 $(document).trigger($.trim(trig), ret);
             });
             UIkit.notify( (lang[ret.success]||ret.success), "success");
+            $form.trigger("after-submit", ret);
         }
         if(ret.error) UIkit.notify( (lang[ret.error]||ret.error), "danger");
     });
