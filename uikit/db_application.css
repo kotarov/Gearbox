@@ -6,7 +6,7 @@ thead th.sorting, thead th.sorting_desc, thead th.sorting_asc {cursor:pointer}
 .uk-table > tbody { border-style: solid; border-color:#aaa; border-width:1px 0;}
 td { vertical-align: middle!important; }
 td.actions a {padding:0.4em;}
-tfoot td.sum, tfoot th.sum {font-style:normal; font-size:1.2em;}
+tfoot td.sum, tfoot th.sum, tfoot th.sum_total, tfoot td.sum_total {font-style:normal; font-size:1.2em;}
 .uk-modal-dialog-small { width: 420px}
 .uk-dropdown {box-shadow: 5px 5px 5px rgba(0,0,0,0.05) }
 sup.uk-badge {font-size:0.6em;position:relative;top:-1em;left:-1em;padding:0 0.3em; line-height:1.5em;}
