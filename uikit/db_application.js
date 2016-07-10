@@ -335,6 +335,12 @@ $(".page-sparkline").each(function(k,v){
 // tinyMCE
 $("[name][data-tinymce]").each(function(k,t){
     var p = {selector:"[name='"+$(t).attr("name")+"']" };
-    $.each( $(t).data(), function(a,v){ p[a] = v; });
+    $.each( $(t).data(), function(a,v){ 
+        if(a=='image_list_url_eval'){
+            p['image_list'] = function(success){ $.getJSON(eval(v)).done(function(ret){success(ret);}) };
+        }else{
+            p[a] =  v;
+        }
+    });
     tinymce.init(p);
 });
