@@ -1,0 +1,2 @@
+let params = { selector:'#msg' };
+smartRTE( params );
