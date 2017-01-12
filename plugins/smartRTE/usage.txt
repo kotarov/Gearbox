@@ -1,6 +1,6 @@
 // init
-let params = { selector:'#id' };
+let params = { selector:'#id', [height:'250px'] };
 smartRTE( params );
 
 // set content
-smartRTESetContent('id_without_dash','html content');
+smartRTEsetContent( 'id_without_dash', 'html content' );
