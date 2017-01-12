@@ -1,2 +1,6 @@
-let params = { selector:'#msg' };
+// init
+let params = { selector:'#id' };
 smartRTE( params );
+
+// set content
+smartRTESetContent('id_without_dash','html content');
